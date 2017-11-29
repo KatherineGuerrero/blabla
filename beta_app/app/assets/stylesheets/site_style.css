@@ -1,0 +1,35 @@
+.btn-lg:visited, .btn:visited{
+    color: #fff;
+}
+
+a{
+    color: #666;
+}
+
+.navbar{
+    border-radius: 0px;
+}
+
+.nav.navbar-nav > li > a {
+    color: #ffffff !important;
+}
+
+a:hover, a:focus {
+    color: #18bc9c !important;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.nav.navbar-nav > li > a:hover, a:focus {
+    color: #18bc9c !important;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+#dashboard_mode_button{
+    height: 30px;
+}
+
+#nombre{
+    margin-top: -10px;
+}

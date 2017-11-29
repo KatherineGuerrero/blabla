@@ -1,0 +1,58 @@
+<%= form_with(model: song, local: true) do |form| %>
+  <% if song.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(song.errors.count, "error") %> prohibited this song from being saved:</h2>
+
+      <ul>
+      <% song.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :song_name, :required => true, class: "form-control" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :file_url %>
+    <%= form.text_field :file_url, id: :song_file_url, :required => true, placeholder: " song.mp3", class: "form-control" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :album_id %>: <br>
+
+    <!-- <#%= form.number_field :album_id, id: :song_album_id %> -->
+
+    <% @albums.order(:name).each do |rt| %>
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+
+                <%= form.radio_button :album_id, rt.id %>
+                <%= form.label :album_name, rt.name %>
+
+            </div>
+
+        </div>
+    <% end %>
+
+
+
+  </div>
+<!-- SUPER IMPORTANTE -->
+<!-- LE PASO EL ID DEL CURRENT USUARIO -->
+  <div class="field">
+    <% if defined? @song and !@song.user_id.nil?%>
+      <%= form.hidden_field :user_id, id: :song_user_id%>
+    <% else %>
+      <%= form.hidden_field :user_id, :value => current_user.id%>
+    <% end %>
+
+  </div>
+
+  <div class="actions">
+    <%= form.submit :class => "btn btn-success" %>
+  </div>
+<% end %>

@@ -1,0 +1,64 @@
+.card_title {
+    padding-left: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
+
+.card_subtitle {
+    padding-left: 5px;
+    font-style: italic;
+    color: #9ba3ab;
+}
+
+.panel-heading{
+    background-color: #e6e6e6;
+    padding: 0px;
+}
+
+.panel-heading:hover{
+    background-color: #2d3f51;
+    padding: 4px;
+}
+
+.show-image{
+    border-radius: 0px;
+    padding: 0px;
+    margin: 0px;
+    border: none;
+}
+
+.show-tron{
+    background-color: #fff;
+    border-style: solid;
+    border-color: #ecf0f1;
+}
+
+body {
+    background-color: #e6e6e6;
+}
+
+.title{
+    text-align: center;
+}
+
+.justitext{
+    text-align: justify;
+}
+
+.band_pic{
+    border-radius: 50%;
+}
+
+.blue_link{
+    color:#3598da;
+}
+
+.blue_link:visited{
+    color:#3598da;
+}
+
+.colorful-tron{
+    border-width: 3px;
+}

@@ -1,0 +1,140 @@
+<%= stylesheet_link_tag 'show' %>
+
+<div class="row">
+    <div class="col-sm-5 well show-tron">
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <%=  image_tag @music_group.get_profile_picture_path("thumbnail"), class: "img-thumbnail", width: "100%"%>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2 title">
+                <h2><%= @music_group.name %></h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2 title">
+                <% if @music_group.bio != nil and @music_group.bio != "" and !(@music_group.bio.blank?)%>
+                    <h5>Bio: <em><%= @music_group.bio %></em></h5>
+                <% else %>
+                    <h5><em>No description available</em></h5>
+                <% end %>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1 justitext">
+                <p>
+                    This band was uploaded by the user <%= link_to(@creator.name, @creator, class: "blue_link") %>
+                    on <%= @music_group.created_at.strftime("%B #{@music_group.created_at.day.ordinalize}, %Y") %>.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-sm-6 col-sm-offset-1 well show-tron">
+        <% if @albums.length > 0%>
+        <h3>Band albums</h3>
+
+        <% i = 0 %>
+        <% @albums.each do |album| %>
+          <% if i%3 == 0%>
+              <div class="row">
+          <% end %>
+            <div class="col-sm-4">
+                <%=  link_to album do %>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="album-picture-wrap">
+
+                                  <%=  image_tag album.get_album_cover_path('thumbnail'), class: "img-thumbnail index-image", width: "100%"%>
+                            </div>
+                        </div>
+                <% end %>
+                        <div class="panel-body">
+                            <div class="row">
+                                <p class="album_card_title">
+                                    <i class="fa fa-headphones"></i>
+                                    <%= album.name %>
+                                </p>
+                            </div>
+                            <div class="row">
+
+                                    <div class="col-sm-10" style="padding-left: 0px; padding-right: 0px;">
+                                        <div class="album_card_subsubtitle">
+                                            <%= album.release_date.strftime("%B, %Y") %>
+                                        </div>
+                                    </div>
+
+                                    <% if user_signed_in?%>
+                                        <% if current_user.id == album.user_id or current_user.role_id > album.user.role_id%>
+
+                                          <div class="col-sm-1" style="padding: 0px;" id="caret_wrap">
+                                              <i class="fa fa-caret-down" id= "caret<%= album.id %>" onclick="caretChange('caret<%= album.id %>', 'down')" data-toggle="collapse" data-target="#creator_options<%= album.id %>"></i>
+                                          </div>
+
+                                        <% end %>
+                                    <% end %>
+                            </div>
+                            <% if user_signed_in?%>
+                                <% if current_user.id == album.user_id or current_user.role_id > album.user.role_id%>
+                                  <div class="row collapse" id="creator_options<%= album.id %>" style="margin-top: 5px;">
+
+                                      <div class="col-sm-4 col-sm-offset-2 ">
+
+                                          <%= link_to edit_album_path(album) do%>
+                                              <i class="fa fa-pencil-square-o" id="edit_fa"></i>
+                                          <% end %>
+
+                                      </div>
+
+                                      <div class="col-sm-4 ">
+
+                                          <%= link_to album, method: :delete, data: { confirm: 'Are you sure you want to delete this album?' } do%>
+                                              <i class="fa fa-trash-o" id="destroy_fa"></i>
+                                          <% end %>
+
+                                      </div>
+
+                                  </div>
+
+                                <% end %>
+                            <% end %>
+
+                        </div>
+                    </div>
+
+            </div>
+            <% i += 1 %>
+            <% if i%3 == 0%>
+                  </div>
+            <% end %>
+
+
+        <% end %>
+
+        <% else %>
+        <h3><em>No albums found</em></h3>
+        <% end %>
+    </div>
+
+</div>
+
+
+<div class="row">
+
+
+    <% if user_signed_in? %>
+      <% if current_user.id == @music_group.user_id or current_user.role_id > @creator.role_id%>
+    	<%= link_to 'Edit this band', edit_music_group_path(@music_group), class: "btn btn-primary" %>
+      <% end  %>
+    <% end %>
+
+
+    <%= link_to 'See all available bands', music_groups_path, class: "btn btn-primary" %>
+
+</div>

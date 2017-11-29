@@ -1,0 +1,187 @@
+<%= stylesheet_link_tag 'show' %>
+
+<div class="row">
+    <div class="col-sm-5 well show-tron">
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <%=  image_tag @song.album.get_album_cover_path("thumbnail"), class: "img-thumbnail", width: "100%"%>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2 title">
+                <h2><%= @song.name %></h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2 title">
+                <h5>From the album <em><%= link_to(@album.name, @album, class: "blue_link") %></em> </h5>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1 justitext">
+                <p>
+                    This song was uploaded by the user <%= link_to(@creator.name, @creator, class: "blue_link") %>
+                    on <%= @song.created_at.strftime("%B #{@song.created_at.day.ordinalize}, %Y") %>.
+                </p>
+            </div>
+        </div>
+        <% if user_signed_in? %>
+          <div clas="row">
+            <div class="col-sm-8 col-sm-offset-2 title">
+
+              <% if not current_user.favorited_songs.include?(@song) %>
+
+                <%= form_for current_user.favorited_songs.build , method: :post , url: favorited_songs_create_url do |form| %>
+                  <%= form.hidden_field :song_id , :value => @song.id %>
+                  <div class="actions">
+                    <%= form.submit 'Add this song to favorites', class: "btn btn-primary btn-sm" %>
+                  </div>
+                <% end %>
+
+              <% else %>
+
+              <%= form_for current_user.favorited_songs.build , method: :delete , url: favorited_songs_delete_url do |form| %>
+                <%= form.hidden_field :song_id , :value => @song.id %>
+                <div class="actions">
+                  <%= form.submit 'Eliminate this song from favorites', class: "btn btn-secondary btn-sm" %>
+                </div>
+              <% end %>
+
+              <% end %>
+
+            </div>
+          </div>
+        <% end %>
+    </div>
+    <div class="col-sm-6 col-sm-offset-1">
+
+        <div class="row">
+
+            <div class="col-sm-12 well show-tron">
+
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2 title">
+                        <h2>An original song from <%= link_to(@band.name, @band, class: "blue_link") %></h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4 col-sm-offset-4">
+                        <%=  image_tag @song.album.music_group.get_profile_picture_path("thumbnail"), class: "img-thumbnail band_pic", width: "100%"%>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 well show-tron">
+
+                <div class="row">
+                    <div class="col-sm-4">
+
+                        <h3 style="color: <%= @color %> "> Rating:
+                        <% if @song.ratings.length > 0 %>
+                          <%= @song.get_rating %>
+                        <% else %>
+                          None
+                        <% end %>
+                        </h3>
+
+                        <p>
+                        <% if @song.ratings.length > 0 %>
+                            <% if @song.ratings.length == 1 %>
+
+                                <%= @song.ratings.length %> person rated this song
+
+
+                            <% else %>
+
+                                <%= @song.ratings.length %> people rated this song
+
+                            <% end %>
+                        <% else %>
+
+                            Be the first one to rate this album
+
+                        <% end %>
+                        </p>
+
+
+                    </div>
+
+                    <div class="col-sm-4 col-sm-offset-4">
+
+                        <% if user_signed_in? %>
+
+                          <% if current_user.has_song_rating(@song.id) %>
+                              <h5>
+                                 Your Rating:
+                                 <%= @song.ratings.find_by_user_id(current_user.id)['rate'] %>
+                             </h5>
+
+                              <%= form_for current_user.song_ratings.build , method: :patch , url: song_ratings_update_url   do |form| %>
+                                <div class="field">
+                                  <h5>Rate:
+                                  <%= form.number_field :rate, :max => 5, :min => 1, :required => true %></h5>
+                                </div>
+
+                                <%= form.hidden_field :user_id , :value => current_user.id %>
+                                <%= form.hidden_field :song_id, :value => @song.id%>
+
+                                <div class="actions">
+                                  <%= form.submit 'Update rating', class: "btn btn-primary btn-sm" %>
+                                </div>
+                              <% end %>
+
+                          <% else %>
+                            <%= form_for current_user.song_ratings.build , method: :post , url: song_ratings_create_url   do |form| %>
+                              <div class="field">
+                                <h5>Rate:
+                                <%= form.number_field :rate, :max => 10, :min => 1, :required => true %></h5>
+                              </div>
+
+                              <%= form.hidden_field :song_id, :value => @song.id%>
+                              <%= form.hidden_field :user_id , :value => current_user.id %>
+
+                              <div class="actions">
+                                <%= form.submit  'Rate', class: "btn btn-primary btn-sm" %>
+                              </div>
+                            <% end %>
+                          <% end %>
+
+                        <% end %>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+<div class="row">
+
+    <%= link_to 'Add this song to playlist', new_playlist_song_path(:from => 'song', :song_id => @song.id), class: "btn btn-primary" %>
+
+    <% if user_signed_in? %>
+      <% if current_user.id == @song.user_id or current_user.role_id == 2%>
+    	<%= link_to 'Edit this song', edit_song_path(@song), class: "btn btn-primary" %>
+      <% end  %>
+    <% end %>
+
+
+    <%= link_to 'See all available songs', songs_path, class: "btn btn-primary" %>
+
+</div>

@@ -1,0 +1,48 @@
+.album_card_title {
+    padding-left: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
+.homepage-banner{
+    background-size: cover;
+    padding: 50px;
+    text-align: center;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #ffffff;
+}
+
+.album_card_subtitle {
+    padding-left: 5px;
+    font-style: italic;
+    color: #9ba3ab;
+}
+
+.panel-heading{
+    background-color: #e6e6e6;
+    padding: 0px;
+}
+
+.panel-heading:hover{
+    background-color: #2d3f51;
+    padding: 4px;
+}
+
+.homepage-image{
+    border-radius: 0px;
+    padding: 0px;
+    margin: 0px;
+    border: none;
+}
+
+.homepage-tron{
+    background-color: #fff;
+    border-style: solid;
+    border-color: #ecf0f1;
+}
+
+body {
+    background-color: #e6e6e6;
+}

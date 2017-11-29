@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1 well">
+
+        <h1>Editing Music Group</h1>
+
+        <%= render 'form', music_group: @music_group %>
+
+        <%= link_to 'Show', @music_group , class: "btn btn-primary"%>
+        <%= link_to 'Back', music_groups_path , class: "btn btn-primary"%>
+        <% if user_signed_in? %>
+        	<% if current_user.id == @music_group.user_id or current_user.role_id > @music_group.user.role_id %>
+        	  <%= link_to 'Destroy', @album, method: :delete, data: { confirm: 'Are you sure you want to delete this band?' }, class: "btn btn-primary" %>
+        	<% end  %>
+        <% end %>
+
+    </div>
+
+</div>

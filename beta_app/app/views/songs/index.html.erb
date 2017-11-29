@@ -1,0 +1,120 @@
+<%= stylesheet_link_tag 'index' %>
+
+
+
+<% if @songs.length == 0 %>
+  <h5> There are no songs uploaded yet </h5>
+<% else %>
+
+  <div class="row well index-tron" id="songs_row">
+      <div class="row">
+          <div class="col-sm-4">
+              <h1>Songs</h1>
+          </div>
+
+          <% if user_signed_in? %>
+            <div class="col-sm-3 col-sm-offset-5">
+                <%= link_to 'Upload center: Create new song', "users/upload_center", class: "btn btn-info" %>
+            </div>
+          <% end %>
+
+      </div>
+
+
+      <div class="row">
+
+          <div class="col-sm-12">
+              <p>
+                  All songs uploaded up to this point, you can access extra features clicking the
+                  <i class="fa fa-caret-down"></i> symbol <em>(Only on the songs you have editing rights)</em>
+              </p>
+          </div>
+
+
+      </div>
+
+
+      <% i = 0 %>
+      <% @songs.each do |song| %>
+        <% if i%6 == 0%>
+            <div class="row">
+        <% end %>
+          <div class="col-sm-2">
+              <%=  link_to song do %>
+                  <div class="panel panel-default">
+                      <div class="panel-heading">
+                          <div class="song-picture-wrap">
+
+                                <%=  image_tag song.album.get_album_cover_path('thumbnail'), class: "img-thumbnail index-image", width: "100%"%>
+                          </div>
+                      </div>
+              <% end %>
+                      <div class="panel-body">
+                          <div class="row">
+                              <p class="album_card_title">
+                                  <i class="fa fa-music"></i>
+                                  <%= song.name %>
+                              </p>
+                          </div>
+                          <div class="row">
+
+                                  <div class="col-sm-10" style="padding-left: 0px; padding-right: 0px;">
+                                      <div class="album_card_subtitle">
+                                          <i class="fa fa-users"></i>
+                                          <%= song.album.music_group.name %>
+                                      </div>
+                                  </div>
+
+                                  <% if user_signed_in?%>
+                                      <% if current_user.id == song.user_id or current_user.role_id == 2%>
+
+                                        <div class="col-sm-1" style="padding: 0px;" id="caret_wrap">
+                                            <i class="fa fa-caret-down" id= "caret<%= song.id %>" onclick="caretChange('caret<%= song.id %>', 'down')" data-toggle="collapse" data-target="#creator_options<%= song.id %>"></i>
+                                        </div>
+
+                                      <% end %>
+                                  <% end %>
+                          </div>
+                          <% if user_signed_in?%>
+                              <% if current_user.id == song.user_id or current_user.role_id == 2%>
+                                <div class="row collapse" id="creator_options<%= song.id %>" style="margin-top: 5px;">
+
+                                    <div class="col-sm-4 col-sm-offset-2 ">
+
+                                        <%= link_to edit_song_path(song) do%>
+                                            <i class="fa fa-pencil-square-o" id="edit_fa"></i>
+                                        <% end %>
+
+                                    </div>
+
+                                    <div class="col-sm-4 ">
+
+                                        <%= link_to song, method: :delete, data: { confirm: 'Are you sure you want to delete this song?' } do%>
+                                            <i class="fa fa-trash-o" id="destroy_fa"></i>
+                                        <% end %>
+
+                                    </div>
+
+                                </div>
+
+                              <% end %>
+                          <% end %>
+
+                      </div>
+                  </div>
+
+          </div>
+          <% i += 1 %>
+          <% if i%6 == 0%>
+                </div>
+          <% end %>
+
+
+      <% end %>
+
+  </div>
+
+
+<% end %>
+
+<br>

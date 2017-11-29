@@ -1,0 +1,36 @@
+<h1>Editing Playlist</h1>
+
+<h2>Edit playlist settings:</h2>
+<%= render 'form', playlist: @playlist %>
+
+<h2>Edit songs:</h2>
+<% @playlist.songs.each do |song|%>
+<p>
+
+<!-- Print song: -->
+<%= @playlist.track_number(song) %>. <%= song.name %>
+
+<!-- Delete song from playlist: -->
+<%= form_for( @playlist, :url => delete_song_playlist_path( @playlist ), :html => { :method => :post } ) do |f| %>
+  <%= f.hidden_field :playlist_id, :value => @playlist.id %>
+  <%= f.hidden_field :track_number, :value => @playlist.track_number(song) %>
+  <%= f.submit("Remove from playlist") %>
+<% end %>
+
+<!-- Change song number on the playlist: -->
+<%= form_for( @playlist, :url => change_index_playlist_path( @playlist ), :html => { :method => :post } ) do |f| %>
+  <%= f.hidden_field :playlist_id, :value => @playlist.id %>
+  <%= f.hidden_field :track_number, :value => @playlist.track_number(song) %>
+  <%= f.label(:change_to, "Change track number to:") %>
+  <%= select_tag :change_to, options_for_select((1..@playlist.songs.count).step(1).to_a.map{|s|
+    ["#{s}", s]
+  }, disabled: @playlist.track_number(song)) %>
+  <%= f.submit("Change") %>
+<% end %>
+
+
+</p>
+<% end %>
+
+<%= link_to 'Show', @playlist %> |
+<%= link_to 'Back', playlists_path %>

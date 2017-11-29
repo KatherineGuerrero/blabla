@@ -1,0 +1,202 @@
+
+<%= stylesheet_link_tag 'user_show' %>
+
+<div class="row">
+    <div class="col-sm-2">
+            <% if user_signed_in? && @user.id == current_user.id %>
+            <div class="picture-wrap">
+
+                <%= link_to edit_profile_picture_user_path do%>
+                    <i class="fa fa-pencil-square-o"></i>
+                    <%= image_tag(@user.get_profile_picture_path, class: "img-thumbnail profile-picture", width: "100%")%>
+                <% end %>
+
+            </div>
+
+            <% else %>
+
+            <%=  image_tag @user.get_profile_picture_path, class: "img-thumbnail profile-picture", width: "100%"%>
+
+            <% end %>
+
+      </div>
+      <div class="col-sm-4">
+          <div class="row">
+              <div class="col-sm-12">
+                  <h3>
+                      <strong>User:</strong>
+                      <%= @user.name %>
+                  </h3>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-sm-12">
+                  <h4>
+                      <strong>Email:</strong>
+                      <%= @user.email %>
+                  </h4>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-sm-12">
+                  <h5>
+                      <strong> followers: </strong>
+                      <%= @user.followers.count %>
+
+                      <strong><%= link_to('following :',following_user_url, class: "blue_link") %></strong>
+                      <%= @user.followed_users.count %>
+                  </h5>
+              </div>
+          </div>
+
+
+          <% if user_signed_in? %>
+              <% if (current_user.id != @user.id) && (not current_user.follow?(@user)) %>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <%= form_for current_user.followers.build , method: :post , url: relationships_create_url do |form| %>
+
+                      <%= form.hidden_field :user_id , :value => @user.id %>
+
+                      <div class="actions">
+                        <%= form.submit 'Follow', class: "btn btn-primary btn-sm" %>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+
+              <% if (current_user.id != @user.id) && (current_user.follow?(@user)) %>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <%= form_for current_user.followers.build , method: :delete , url: relationships_delete_url do |form| %>
+
+                      <%= form.hidden_field :user_id , :value => @user.id %>
+
+                      <div class="actions">
+                        <%= form.submit 'Unfollow', class: "btn btn-secondary btn-sm" %>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+
+          <% end %>
+
+          <div class="row">
+              <div class="col-sm-12">
+                  <% if user_signed_in? %>
+                    <% if @user.id == current_user.id || (current_user.role_id > @user.role_id) %>
+                    <%= link_to 'Edit user', edit_user_path(@user) %> |
+                    <%= link_to 'Change password', change_password_user_path %> |
+                    <%= link_to 'Erase account', @user, method: :delete, data: { confirm: 'Are you sure?' } %>
+
+                    <% end %>
+                  <% end %>
+              </div>
+          </div>
+      </div>
+
+      <%if user_signed_in? && current_user.id != @user.id && current_user.follow?(@user) %>
+      <div class="col-sm-4" >
+        <div class="row">
+          <div class="col-sm-12">
+              <h3>
+                  <strong>Leave a comment</strong>
+              </h3>
+          </div>
+        </div>
+
+        <%= form_for @user.comments.build , method: :create , url: user_comments_create_url do |form| %>
+
+          <%= form.hidden_field :mentioned_id , :value => @user.id %>
+
+          <div class="row">
+            <div class="col-sm-1-2">
+              <%= form.text_area :comment, id: :post_content, :required => true, placeholder: "say something to this user", class: "form-control" , maxlength: 120%>
+
+            </div>
+          </div>
+
+          <div class ="row" >
+            <div class="col-sm-1-2">
+              <div class="actions">
+                <%= form.submit 'comment', class: "btn btn-primary btn-sm" %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+      </div>
+      <%end %>
+
+  </div>
+</div>
+
+<div class="row">
+
+    <div class="col-sm-2 col-sm-offset-1">
+        <h3>Playlists</h3>
+        <div class="list-group">
+          <% @user.playlists.each do |playlist| %>
+            <% if (user_signed_in? && @user.id == current_user.id) || !playlist.private%>
+              <%= link_to playlist.get_path_to_show(), class: "list-group-item" do %>
+                  <h4 class="list-group-item-heading"><%= playlist.name %></h4>
+                  <p class="list-group-item-text"><%= playlist.description %></p>
+              <% end %>
+            <% end %>
+
+          <% end %>
+          </div>
+          <% if user_signed_in? %>
+            <% if current_user.id == @user.id %>
+                <%= link_to "+ New playlist", new_playlist_path , class: "btn btn-link"%>
+            <% end %>
+          <% end %>
+
+
+    </div>
+
+    <div class="col-sm-3">
+        <h3>Followed playlists</h3>
+        <div class="list-group">
+          <% @user.followed_playlists.each do |playlist| %>
+              <%= link_to playlist.get_path_to_show(), class: "list-group-item" do %>
+                  <h4 class="list-group-item-heading"><%= playlist.name %> (created by <%= playlist.user.name %>)</h4>
+                  <p class="list-group-item-text"><%= playlist.description %></p>
+            <% end %>
+
+          <% end %>
+          </div>
+    </div>
+
+    <div class="col-sm-2">
+        <h3>Favorite songs</h3>
+        <div class="list-group">
+          <% @user.favorited_songs.each do |favorited_song| %>
+              <%= link_to favorited_song.get_path_to_show(), class: "list-group-item" do %>
+                  <h4 class="list-group-item-heading"><%= favorited_song.name %> </h4>
+                  <p class="list-group-item-text"><%= favorited_song.get_rating %></p>
+            <% end %>
+
+          <% end %>
+        </div>
+    </div>
+
+    <div class="col-sm-3">
+      <h3> Comments <h3>
+        <div class="list-group">
+          <% @user.comments.each do |comment| %>
+              <% #@author = User.find(comment.author_id)%>
+              <div class= "list-group-item">
+                  <p class="list-group-item-text"><%= comment.comment %></p>
+              </div>
+
+          <% end %>
+        </div>
+
+    </div>
+
+
+
+</div>

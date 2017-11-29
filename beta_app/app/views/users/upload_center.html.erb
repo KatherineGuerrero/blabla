@@ -1,0 +1,42 @@
+<%= stylesheet_link_tag 'show' %>
+
+<div class="row well show-tron">
+    <h1>Your upload center</h1>
+</div>
+
+<div class="row">
+
+    <!-- Este es el crear grupo -->
+    <div class="col-sm-5 well show-tron">
+
+
+        <%= form_tag({controller: :music_groups}, {multipart: true}) do %>
+          <%= render "music_groups/new", music_group: @music_group %>
+        <% end %>
+
+    </div>
+
+    <!-- Este es el crear album -->
+    <div class="col-sm-5 col-sm-offset-2 well show-tron">
+
+
+        <%= form_tag({controller: :albums}, {multipart: true}) do %>
+          <%= render "albums/new", album: @album, music_groups: @music_groups %>
+        <% end %>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-sm-6 col-sm-offset-3 well show-tron">
+
+
+        <%= form_tag({controller: :songs}, {multipart: true}) do %>
+          <%= render "songs/new", song: @song, all_albums: @all_albums %>
+        <% end %>
+
+    </div>
+
+</div>

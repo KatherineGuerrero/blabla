@@ -1,0 +1,105 @@
+<%= stylesheet_link_tag 'public_playlists' %>
+
+<div class="row">
+
+    <div class="col-sm-12 col-centered">
+
+        <div class="row well playlists-tron playlist-card">
+
+            <div class="col-sm-6" style="padding: 60px 40px;">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h1>Playlists</h1>
+                        <h4>
+                            The best way to organize and enjoy your favorite songs.
+                        </h4>
+
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="row" style="margin: 10px 0px;">
+                            <% if user_signed_in?%>
+                            <div class="col-sm-7">
+                                <%= link_to 'Create your own playlist!', new_playlist_path, class: "btn btn-lg btn-info" %>
+
+                            </div>
+                            <div class="col-sm-4">
+                                <%= link_to 'Search playlists', static_pages_search_page_path(:search => "Playlists"), class: "btn btn-lg btn-default"%>
+
+                            </div>
+                            <% else %>
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <%= link_to 'Search playlists', static_pages_search_page_path(:search => "Playlists"), class: "btn btn-lg btn-default"%>
+
+                                </div>
+                            <% end %>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-sm-12">
+                        <p>
+                            Explore this page to find a wide variety of playlists, different styles,
+                            sounds and cultures come together. The limit is your imagination.
+                        </p>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-sm-6" style="padding:0px;">
+                <%= image_tag 'playlists/subway.jpg', class: "image-thumbnail playlist-card-image", width: "100%" %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-sm-4 col-sm-offset-1 well playlists-tron">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Popular playlists</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="list-group">
+                  <% @most_viewed.each do |popular_playlist| %>
+                      <%= link_to popular_playlist.get_path_to_show(), class: "list-group-item" do %>
+                          <h4 class="list-group-item-heading"><%= popular_playlist.name %></h4>
+                          <p class="list-group-item-text"><%= popular_playlist.description %> </p>
+                    <% end %>
+
+                  <% end %>
+                  </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-4 col-sm-offset-2 well playlists-tron">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Recently uploaded</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="list-group">
+                  <% @most_recent.each do |recent_playlist| %>
+                      <%= link_to recent_playlist.get_path_to_show(), class: "list-group-item" do %>
+                          <h4 class="list-group-item-heading"><%= recent_playlist.name %></h4>
+                          <p class="list-group-item-text"><%= recent_playlist.description %> </p>
+                    <% end %>
+
+                  <% end %>
+                  </div>
+            </div>
+        </div>
+    </div>
+
+</div>

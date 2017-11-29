@@ -1,0 +1,24 @@
+<div class="row">
+
+    <div class="col-sm-12">
+        <h1>Edit your profile picture</h1>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-sm-3">
+        <%=image_tag @user.get_profile_picture_path, id:"profile-picture-preview", class: "img-thumbnail", width: "100%"%>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="well">
+            <%= form_for :user, url: update_profile_picture_user_path, method: :post, html: {multipart: true, class: 'form-inline'} do |f| %>
+                <%= f.file_field :profile_picture, required: true %>
+                <%= f.submit "Save" %>
+            <% end %>
+        </div>
+    </div>
+
+</div>

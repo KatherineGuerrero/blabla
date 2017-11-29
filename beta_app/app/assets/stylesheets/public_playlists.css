@@ -1,0 +1,27 @@
+.playlists-tron{
+    background-color: #fff;
+    border-style: solid;
+    border-color: #ecf0f1;
+}
+
+.playlist-card{
+    padding: 0px;
+}
+
+.playlist-dashboard{
+    margin: 50px 0px 50px 0px;
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+.playlist-card-image{
+    border-radius: 0px 5px 5px 0px;
+}
+
+
+body {
+    background-color: #e6e6e6;
+}

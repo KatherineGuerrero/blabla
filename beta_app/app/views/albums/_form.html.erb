@@ -1,0 +1,59 @@
+<%= form_with(model: album, local: true, html: {multipart: true}) do |form| %>
+  <% if album.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(album.errors.count, "error") %> prohibited this album from being saved:</h2>
+
+      <ul>
+      <% album.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :album_name, :required => true, class: "form-control" %>
+  </div>
+
+  <div class="field">
+
+    <% if defined? @album and !@album.user_id.nil?%>
+      <%= form.hidden_field :user_id, id: :album_user_id%>
+    <% else %>
+      <%= form.hidden_field :user_id, :value => current_user.id%>
+    <% end %>
+
+  </div>
+
+  <div class="field">
+    <%= form.label :music_group_id %>
+
+    <% @music_groups.order(:name).each do |rt| %>
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+
+                <%= form.radio_button :music_group_id, rt.id %>
+                <%= form.label :music_group_name, rt.name %>
+
+            </div>
+
+        </div>
+    <% end %>
+
+
+  </div>
+
+  <div class="field">
+    <%= form.label :release_date %>
+    <%= form.date_select :release_date, id: :album_release_date, class: "form-control" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cover %>
+    <%= form.file_field :cover, id: :album_cover %>
+  </div>
+  <div class="actions">
+    <%= form.submit :class => "btn btn-success" %>
+  </div>
+<% end %>

@@ -1,0 +1,41 @@
+<%= stylesheet_link_tag 'show' %>
+
+<h1> Following </h1>
+
+  <div class="well" >
+    Here you can see the users fallowed by <%= @user.name %> ,  and visit their pages.
+  </div>
+
+
+  <div class="col-sm-6 well show-tron">
+    <% @users.each do |user_follow| %>
+      <div class="row">
+
+        <div class="col-sm-4">
+
+          <%=  link_to user_follow do %>
+              <div class="panel panel-default">
+                  <div class="panel-heading">
+                      <div class="album-picture-wrap">
+
+                        <%= image_tag(@user.get_profile_picture_path, class: "img-thumbnail profile-picture", width: "100%")%>
+                      </div>
+                  </div>
+          <% end %>
+
+          <div class="panel-body">
+              <div class="row">
+                  <p class="album_card_title">
+                      <i class="fa fa-user-circle"></i>
+                      <%= user_follow.name %>
+                  </p>
+              </div>
+          </div>
+
+        </div>
+
+
+      </div >
+    </div>
+    <% end %>
+</div>

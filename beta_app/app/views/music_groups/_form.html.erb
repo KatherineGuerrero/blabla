@@ -1,0 +1,32 @@
+<%= form_with(model: music_group, local: true) do |form| %>
+  <% if music_group.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(music_group.errors.count, "error") %> prohibited this music_group from being saved:</h2>
+
+      <ul>
+      <% music_group.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :music_group_name, :required => true, class: "form-control" %>
+  </div>
+
+  <div class="field">
+
+    <%= form.label :bio %>
+    <%= form.text_area :bio, id: :music_group_bio, placeholder: " ... Add a bio", class: "form-control" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :profile_picture %>
+    <%= form.file_field :profile_picture, id: :music_group_profile_picture %>
+  </div>
+  <div class="actions">
+    <%= form.submit :class => "btn btn-success" %>
+  </div>
+<% end %>

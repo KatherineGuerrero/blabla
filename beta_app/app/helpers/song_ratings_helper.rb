@@ -1,0 +1,2 @@
+module SongRatingsHelper
+end

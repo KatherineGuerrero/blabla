@@ -1,0 +1,84 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <%= link_to static_pages_home_path, id: "home_button", class: "navbar-brand", width: "100%" do %>
+        <%= image_tag "nombre.png", width: "90px", id: "nombre" %>
+      <% end %>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+        <ul class="nav navbar-nav navbar-left">
+
+            <li> <%= link_to "Playlists", '/public_playlists'%></li>
+
+        </ul>
+
+      <%= form_tag static_pages_search_page_path, :method => "get", :class => "navbar-form navbar-left" do %>
+        <div class="form-group">
+          <%= text_field_tag :search, nil, :class => "form-control", :placeholder => "Search" %>
+        </div>
+          <%= submit_tag "Submit", :class => "btn btn-default" %>
+      <% end %>
+
+      <ul class="nav navbar-nav navbar-right">
+
+          <li> <%= link_to '/posts/news_feed' do %>
+                  <i class="fa fa-newspaper-o"></i> News feed
+              <% end %>
+          </li>
+
+          <% if user_signed_in? %>
+            <% if current_user.role_id == 2 %>
+                <li> <%= link_to dashboard_path, method: :get  do %>
+                    <i class="fa fa-tachometer"></i> Dashboard
+                    <% end %>
+                </li>
+            <% end %>
+
+            <li> <%= link_to '/users/upload_center' do %>
+                    <i class="fa fa-cloud-upload"></i> Upload center
+                <% end %>
+            </li>
+            <li> <%= link_to destroy_user_session_path, method: :delete  do %>
+                    <i class="fa fa-sign-out"></i> Logout
+                <% end %>
+            </li>
+
+            <li> <%= link_to user_path(current_user) do %>
+                      <% if current_user.role_id == 2 %>
+                          <i class="fa fa-user-secret"></i>
+                      <% else %>
+                          <i class="fa fa-user"></i>
+                      <% end  %>
+                     <%= current_user.name %>
+                <% end %>
+            </li>
+
+          <% else %>
+
+            <li> <%= link_to new_user_registration_path do %>
+                    <i class="fa fa-user-plus"></i> Sign up
+                <% end %>
+            </li>
+            <li> <%= link_to new_user_session_path do %>
+                    <i class="fa fa-sign-in"></i> Login
+                <% end %>
+            </li>
+            <li class="active"> <%= link_to "#", disabled: true do %>
+                    <i class = "fa fa-low-vision"></i>Visitor mode
+                <% end %>
+            </li>
+
+          <% end %>
+
+      </ul>
+    </div>
+  </div>
+</nav>

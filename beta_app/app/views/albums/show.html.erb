@@ -1,0 +1,183 @@
+<%= stylesheet_link_tag 'show' %>
+
+<div class="row">
+    <div class="col-sm-5 well show-tron">
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <%=  image_tag @album.get_album_cover_path("thumbnail"), class: "img-thumbnail", width: "100%"%>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2 title">
+                <h2><%= @album.name %></h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2 title">
+                <h5>Original release was on <%= @album.release_date.strftime("%B of %Y") %></h5>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1 justitext">
+                <p>
+                    This album was uploaded by the user <%= link_to(@creator.name, @creator, class: "blue_link") %>
+                    on <%= @album.created_at.strftime("%B #{@album.created_at.day.ordinalize}, %Y") %>.
+                </p>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-6 col-sm-offset-1">
+
+        <div class="row">
+
+            <div class="col-sm-12 well show-tron">
+
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2 title">
+                        <h2>An original album from <%= link_to(@music_group.name, @music_group, class: "blue_link") %></h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4 col-sm-offset-4">
+                        <%=  image_tag @album.music_group.get_profile_picture_path("thumbnail"), class: "img-thumbnail band_pic", width: "100%"%>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 well show-tron">
+
+                <div class="row">
+                    <div class="col-sm-4">
+
+                        <h3 style="color: <%= @color %> "> Rating:
+                        <% if @album.ratings.length > 0 %>
+                          <%= @album.get_rating %>
+                        <% else %>
+                          None
+                        <% end %>
+                        </h3>
+
+                        <p>
+                        <% if @album.ratings.length > 0 %>
+                            <% if @album.ratings.length == 1 %>
+
+                                <%= @album.ratings.length %> person rated this album
+
+
+                            <% else %>
+
+                                <%= @album.ratings.length %> people rated this album
+
+                            <% end %>
+                        <% else %>
+
+                            Be the first one to rate this album
+
+                        <% end %>
+                        </p>
+
+
+                    </div>
+
+                    <div class="col-sm-4 col-sm-offset-4">
+
+                        <% if user_signed_in? %>
+
+                          <% if current_user.has_rating(@album.id) %>
+                            <h5>
+                                Your Rating:
+                                 <%= @album.ratings.find_by_user_id(current_user.id)['rate'] %>
+                             </h5>
+
+                              <%= form_for current_user.ratings.build , method: :patch , url: album_ratings_update_url   do |form| %>
+                                <div class="field">
+                                  <h5>Rate:
+                                      <%= form.number_field :rate, :max => 5, :min => 1, :required => true %>
+                                  </h5>
+                                </div>
+
+                                <%= form.hidden_field :user_id , :value => current_user.id %>
+                                <%= form.hidden_field :album_id, :value => @album.id%>
+
+                                <div class="actions">
+                                  <%= form.submit 'Update rating', class: "btn btn-primary btn-sm" %>
+                                </div>
+                              <% end %>
+
+
+
+                          <% else %>
+                            <%= form_for current_user.ratings.build , method: :post , url: album_ratings_create_url   do |form| %>
+                              <div class="field">
+                                <h5>Rate:
+                                    <%= form.number_field :rate, :max => 10, :min => 1, :required => true %>
+                                </h5>
+                              </div>
+
+                              <%= form.hidden_field :album_id, :value => @album.id%>
+
+                              <div class="actions">
+                                <%= form.submit  'Rate', class: "btn btn-primary btn-sm"%>
+                              </div>
+                            <% end %>
+                          <% end %>
+
+                        <% end %>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3 well show-tron">
+        <% if @songs.length > 0%>
+        <h3>Songs featured</h3>
+
+        <div class="list-group">
+          <% i = 1%>
+          <% @songs.each do |song| %>
+              <%= link_to song.get_path_to_show(), class: "list-group-item" do %>
+                   <%= i %>. <h4 class="list-group-item-heading"> <%= song.name %></h4>
+            <% end %>
+            <% i += 1%>
+
+          <% end %>
+          </div>
+
+        <% else %>
+        <h3><em>No songs featured</em></h3>
+        <% end %>
+    </div>
+
+</div>
+
+<div class="row">
+
+
+    <% if user_signed_in? %>
+      <% if current_user.id == @album.user_id or current_user.role_id == 2%>
+    	<%= link_to 'Edit this album', edit_album_path(@album), class: "btn btn-primary" %>
+      <% end  %>
+    <% end %>
+
+
+    <%= link_to 'See all available albums', albums_path, class: "btn btn-primary" %>
+
+</div>

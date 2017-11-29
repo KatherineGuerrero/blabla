@@ -1,0 +1,17 @@
+<%= form_with(model: user_follow_playlist, local: true) do |form| %>
+  <% if user_follow_playlist.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(user_follow_playlist.errors.count, "error") %> prohibited this user_follow_playlist from being saved:</h2>
+
+      <ul>
+      <% user_follow_playlist.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

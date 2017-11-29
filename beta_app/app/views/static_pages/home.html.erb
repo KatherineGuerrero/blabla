@@ -1,0 +1,158 @@
+<%= stylesheet_link_tag 'homepage' %>
+
+<style type="text/css">
+  .homepage-banner {
+    background-image: url( <%= @banner_image %> );
+  }
+</style>
+
+<div class="row homepage-banner">
+    <div class="row">
+        <%= image_tag "logo_icon.png", width: "15%" %>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-12" style="text-align: center">
+            <h1>Welcome to Singará!</h1>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <% if current_user.nil?%>
+            <div class="col-sm-12">
+                <h3>You're now part of the best music site in existance</h3>
+            </div>
+            <div class="col-sm-12">
+                <h4>Start your journey with us:</h4>
+            </div>
+        <%= link_to "Sign up now!", new_user_registration_path, class: "btn btn-lg btn-info", style: "color: #ffffff;" %>
+        <%= link_to "Sign in", new_user_session_path, class: "btn btn-lg btn-success", style: "color: #ffffff;" %>
+        <% else %>
+            <div class="col-sm-12">
+                <h3>Dive into the music of the past, present and future</h3>
+            </div>
+            <div class="col-sm-12">
+                <h4>Search anything in our search bar, or: </h4> <%= link_to "Go to your user site", user_path(current_user), class: "btn btn-lg btn-info", style: "color: #ffffff;" %>
+            </div>
+        <% end %>
+
+    </div>
+
+</div>
+
+
+<div class="row well homepage-tron" id="albums_row">
+    <div class="row">
+        <div class="col-sm-12">
+
+            <p><h2>Best rated albums</h2> <a href="/albums">See all albums</a></p>
+
+        </div>
+    </div>
+
+    <div class="row">
+
+    <% @albums.each do |album| %>
+        <div class="col-sm-2">
+                <%=  link_to album do %>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <%= image_tag album.get_album_cover_path('thumbnail'), class: "img-thumbnail homepage-image", width: "100%" %>
+                    </div>
+                <% end %>
+                    <div class="panel-body">
+                        <div class="row">
+                            <p class="album_card_title">
+                                <%= album.name %>
+                            </p>
+                        </div>
+                        <div class="row">
+                            <p class="album_card_subtitle">
+                                <%= album.music_group.name %>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+    <% end %>
+    </div>
+
+</div>
+
+<div class="row well homepage-tron" id="songs_row">
+    <div class="row">
+        <div class="col-sm-12">
+
+            <p><h2>Best rated songs</h2> <a href="/songs">See all songs</a></p>
+
+        </div>
+    </div>
+
+    <div class="row">
+
+    <% @songs.each do |song| %>
+        <div class="col-sm-2">
+            <%=  link_to song do %>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <%=  image_tag song.album.get_album_cover_path('thumbnail'), class: "img-thumbnail homepage-image", width: "100%"%>
+                    </div>
+            <% end %>
+                    <div class="panel-body">
+                        <div class="row">
+                            <p class="album_card_title">
+                                <%= song.name %>
+                            </p>
+                        </div>
+                        <div class="row">
+                            <p class="album_card_subtitle">
+                                <%= song.album.music_group.name %>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+
+    <% end %>
+    </div>
+
+
+</div>
+
+<div class="row well homepage-tron" id="bands_row">
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <p><h2>New bands</h2> <a href="/music_groups">See all bands</a></p>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <% @music_groups.each do |music_group| %>
+            <div class="col-sm-2">
+                <%=  link_to music_group do %>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <%=  image_tag music_group.get_profile_picture_path('thumbnail'), class: "img-thumbnail homepage-image", width: "100%"%>
+                        </div>
+                <% end %>
+                        <div class="panel-body">
+                            <div class="row">
+                                <p class="album_card_title">
+                                    <%= music_group.name %>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+
+        <% end %>
+    </div>
+
+</div>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PracticeApp</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag    'site_style', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= Gon::Base.render_data %>
+
+<!--     <#% if notice.present? %>
+      <p id="notice" class="notice"><#%= notice %></p>
+    <#% end %>
+    <p id="notice"><#%= @notice %></p>
+    <p class="alert"><#%=alert%></p> -->
+
+  </head>
+
+
+  <%= render 'layouts/header' %>
+
+  <div class="container">
+    <% if notice %><div class="alert alert-info"><%= notice %></div>  <%end%>
+    <% if @notice %><div class="alert alert-info"><%= @notice %></div>  <%end%>
+    <% if alert %><div class="alert alert-warning"><%= alert %></div> <%end%>
+
+
+  <body>
+    <%= yield %>
+  </body>
+</html>

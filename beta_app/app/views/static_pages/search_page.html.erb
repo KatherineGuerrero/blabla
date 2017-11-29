@@ -1,0 +1,60 @@
+<h1> Explore! </h1>
+
+<div class="well" >
+<%= form_for static_pages_advanced_search_url, :url => static_pages_advanced_search_url do |f| %>
+    <div class="form-group">
+      <%= f.text_field :search, autofocus: true, class:"form-control", id:"focusedInput", :placeholder => "Search" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.select :kind , grouped_options_for_select(@grouped_options) ,  class:"form-control", id:"focusedInput" %>
+    </div>
+
+    <div class="action">
+      <%= f.submit "Filter", class:"btn btn-primary" %>
+    </div>
+
+<% end %>
+</div>
+
+<% if !@blank %>
+
+    <div class="alert alert-dismissible alert-info">
+      <p>
+          <em>Showing results for: <strong> <%= @term %> <strong></em>
+      </p>
+    </div>
+
+    <% @results.each do |key, values| %>
+
+        <% if !values.empty?%>
+          <div class="panel panel-primary" >
+            <div class="panel-heading">
+              <h3 class= "panel-title"><%= key %></h3>
+            </div>
+              <div class="panel-body">
+                <% for element in values do %>
+                      <%= link_to element.get_path_to_show(), class: "list-group-item" do %>
+                          <h4 class="list-group-item-heading"><%= element.name %></h4>
+                        <% end %>
+
+                <% end %>
+        </div>
+        <% end%>
+
+    <% end %>
+
+<% end%>
+
+<% if @blank %>
+
+    <div class="alert alert-dismissible alert-info">
+    <p>
+    <% if @term != ""%>
+        <em>Couldn't find results for: <%= @term %></em>
+    <% else %>
+        <em>Search term empty</em>
+    <% end %>
+    </p>
+  </div>
+<% end%>
